@@ -10,7 +10,18 @@ module.exports = async function handler(req, res) {
   if (!GROQ_API_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set' });
 
   try {
-    const body = req.body;
+    // Manually parse body since Vercel doesn't auto-parse
+    let body;
+    if (typeof req.body === 'string') {
+      body = JSON.parse(req.body);
+    } else if (typeof req.body === 'object' && req.body !== null) {
+      body = req.body;
+    } else {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      body = JSON.parse(Buffer.concat(chunks).toString());
+    }
+
     const messages = [];
     if (body.system) messages.push({ role: 'system', content: body.system });
     if (Array.isArray(body.messages)) messages.push(...body.messages);
