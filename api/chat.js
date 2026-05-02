@@ -4,7 +4,6 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
   const GROQ_API_KEY = process.env.GROQ_API_KEY;
   if (!GROQ_API_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set' });
@@ -20,18 +19,7 @@ module.exports = async function handler(req, res) {
       body = req.body || {};
     }
 
-    const messages = [];
-    if (body.system) messages.push({ role: 'system', content: body.system });
-    if (Array.isArray(body.messages)) {
-      body.messages.forEach(m => {
-        if (m.role && m.content) messages.push({ role: m.role, content: m.content });
-      });
-    }
-
-    if (messages.length === 0) {
-      messages.push({ role: 'user', content: 'Hello' });
-    }
-
+    // Send fixed test message to Groq ignoring body
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -40,18 +28,15 @@ module.exports = async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'llama3-8b-8192',
-        max_tokens: 500,
-        messages: messages
+        max_tokens: 100,
+        messages: [
+          { role: 'user', content: 'Say hello in one sentence.' }
+        ]
       })
     });
 
     const data = await groqResponse.json();
-
-    if (data.error) {
-      return res.status(500).json({ error: data.error.message });
-    }
-
-    const text = data.choices?.[0]?.message?.content || "Sorry, try again!";
+    const text = data.choices?.[0]?.message?.content || JSON.stringify(data);
     return res.status(200).json({ content: [{ type: 'text', text }] });
 
   } catch (err) {
