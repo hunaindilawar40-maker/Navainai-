@@ -10,21 +10,27 @@ module.exports = async function handler(req, res) {
   if (!GROQ_API_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set' });
 
   try {
-    // Manually parse body since Vercel doesn't auto-parse
     let body;
-    if (typeof req.body === 'string') {
-      body = JSON.parse(req.body);
-    } else if (typeof req.body === 'object' && req.body !== null) {
-      body = req.body;
-    } else {
+    try {
       const chunks = [];
       for await (const chunk of req) chunks.push(chunk);
-      body = JSON.parse(Buffer.concat(chunks).toString());
+      const raw = Buffer.concat(chunks).toString();
+      body = JSON.parse(raw);
+    } catch(e) {
+      body = req.body || {};
     }
 
     const messages = [];
     if (body.system) messages.push({ role: 'system', content: body.system });
-    if (Array.isArray(body.messages)) messages.push(...body.messages);
+    if (Array.isArray(body.messages)) {
+      body.messages.forEach(m => {
+        if (m.role && m.content) messages.push({ role: m.role, content: m.content });
+      });
+    }
+
+    if (messages.length === 0) {
+      messages.push({ role: 'user', content: 'Hello' });
+    }
 
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -32,10 +38,19 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${GROQ_API_KEY}`
       },
-      body: JSON.stringify({ model: 'llama3-8b-8192', max_tokens: 1000, messages })
+      body: JSON.stringify({
+        model: 'llama3-8b-8192',
+        max_tokens: 500,
+        messages: messages
+      })
     });
 
     const data = await groqResponse.json();
+
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message });
+    }
+
     const text = data.choices?.[0]?.message?.content || "Sorry, try again!";
     return res.status(200).json({ content: [{ type: 'text', text }] });
 
