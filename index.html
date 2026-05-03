@@ -94,7 +94,7 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 18px 60px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1094,7 +1094,7 @@ footer {
 
 /* ── MOBILE MENU ── */
 .nav-hamburger {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
@@ -1113,29 +1113,33 @@ footer {
 .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-hamburger.open span:nth-child(2) { opacity: 0; }
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-@media (max-width: 768px) {
-  nav { padding: 16px 24px; }
-  .nav-hamburger { display: flex; }
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0; right: 0;
-    background: rgba(5,10,20,0.98);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column;
-    gap: 0;
-    padding: 12px 0;
-  }
-  .nav-links.open { display: flex; }
-  .nav-links li a {
-    display: block;
-    padding: 14px 28px;
-    font-size: 15px;
-    border-bottom: 1px solid rgba(0,200,255,0.06);
-  }
-  .nav-cta { font-size: 12px; padding: 9px 16px; }
+.nav-links {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: rgba(5,10,20,0.98);
+  border-bottom: 1px solid var(--border);
+  flex-direction: column;
+  gap: 0;
+  padding: 12px 0;
+  list-style: none;
+}
+.nav-links.open { display: flex; }
+.nav-links li a {
+  display: block;
+  padding: 14px 28px;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(0,200,255,0.06);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links li a:hover { color: var(--cyan); }
   .hero h1 { font-size: clamp(28px, 8vw, 56px); }
   .steps-grid { grid-template-columns: 1fr 1fr; }
   .features-grid { grid-template-columns: 1fr 1fr; }
@@ -1367,6 +1371,7 @@ footer {
 
 <!-- NAV -->
 <nav>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   <a href="index.html" class="nav-logo">
     <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
       <polygon points="36,4 64,20 64,52 36,68 8,52 8,20" fill="rgba(0,200,255,0.05)" stroke="url(#ng1)" stroke-width="1.5"/>
@@ -1385,7 +1390,6 @@ footer {
     </svg>
     <span class="nav-brand">NAVAIN <span>AI</span></span>
   </a>
-  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
   <ul class="nav-links" id="nav-links">
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#features">Features</a></li>
@@ -1394,17 +1398,10 @@ footer {
     <li><a href="#voice-demo">Live Demo</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-    <a href="https://www.facebook.com/share/1ArY955KHo/" target="_blank" class="social-link" title="Facebook" style="width:32px;height:32px;margin-right:4px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="#00c8ff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-    </a>
-    <a href="https://www.instagram.com/navain.ai?igsh=amV0eGVlcDZsdTVj" target="_blank" class="social-link" title="Instagram" style="width:32px;height:32px;margin-right:12px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-    </a>
   <button onclick="openLoginModal()" class="nav-login-btn">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Login
   </button>
-  <a href="#contact" class="nav-cta">Get Started</a>
 </nav>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -1606,7 +1603,23 @@ footer {
       </div>
     </div>
 
-
+    <!-- API Key Config -->
+    <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.18);border-radius:14px;padding:22px 24px;margin-bottom:20px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;">
+        <div style="width:40px;height:40px;background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🔑</div>
+        <div>
+          <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:4px;">Anthropic API Key</div>
+          <div style="font-family:DM Sans,sans-serif;font-size:12px;color:rgba(160,200,230,0.45);line-height:1.5;">Powers the Stacy chatbot and live voice demo. Stored only in this browser — never sent to any server. Get your key at <span style="color:#00c8ff;">console.anthropic.com</span></div>
+        </div>
+        <div id="api-key-badge" style="flex-shrink:0;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:20px;"></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="flex:1;padding:12px 16px;background:#050a14;border:1px solid rgba(0,200,255,0.18);border-radius:9px;color:#e8f4ff;font-family:DM Sans,sans-serif;font-size:13px;outline:none;transition:border-color 0.3s;box-sizing:border-box;" onfocus="this.style.borderColor='#00c8ff'" onblur="this.style.borderColor='rgba(0,200,255,0.18)'" onkeydown="if(event.key==='Enter')saveApiKey()" />
+        <button onclick="saveApiKey()" style="padding:12px 22px;background:linear-gradient(135deg,#00c8ff,#0055cc);color:#fff;font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:9px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Save & Activate</button>
+        <button onclick="clearApiKey()" style="padding:12px 16px;background:transparent;color:rgba(255,77,109,0.6);font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,77,109,0.2);border-radius:9px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,77,109,0.5)';this.style.color='#ff4d6d'" onmouseout="this.style.borderColor='rgba(255,77,109,0.2)';this.style.color='rgba(255,77,109,0.6)'">Clear</button>
+      </div>
+      <div id="api-key-msg" style="margin-top:10px;font-family:Rajdhani,sans-serif;font-size:12px;display:none;"></div>
+    </div>
 
     <!-- Clear data -->
     <div style="text-align:center;padding-bottom:32px;">
@@ -1668,6 +1681,7 @@ function openPortal(){
   document.body.style.overflow = 'hidden';
   portalRefresh();
   startPortalClock();
+  loadApiKeyStatus();
 }
 function closePortal(){
   document.getElementById('admin-portal').style.display = 'none';
@@ -1804,12 +1818,66 @@ function portalRefresh(){
   }).join('');
 }
 
-// Auto-load key from server config
+// ── API KEY MANAGEMENT ──
+function loadApiKeyStatus(){
+  var saved = localStorage.getItem('navain_api_key') || '';
+  var badge = document.getElementById('api-key-badge');
+  var input = document.getElementById('api-key-input');
+  if(saved){
+    window.NAVAIN_KEY = saved;
+    input.value = saved;
+    badge.textContent = '✓ Active';
+    badge.style.background = 'rgba(0,230,118,0.12)';
+    badge.style.color = '#00e676';
+    badge.style.border = '1px solid rgba(0,230,118,0.25)';
+  } else {
+    badge.textContent = '✗ Not Set';
+    badge.style.background = 'rgba(255,77,109,0.1)';
+    badge.style.color = '#ff4d6d';
+    badge.style.border = '1px solid rgba(255,77,109,0.2)';
+  }
+}
+
+function saveApiKey(){
+  var key = document.getElementById('api-key-input').value.trim();
+  var msg = document.getElementById('api-key-msg');
+  if(!key){
+    msg.style.display = 'block';
+    msg.style.color = '#ff6b6b';
+    msg.textContent = '⚠ Please paste your API key first.';
+    return;
+  }
+  if(!key.startsWith('gsk_')){
+    msg.style.display = 'block';
+    msg.style.color = '#ff6b6b';
+    msg.textContent = '⚠ Key should start with gsk_... Please check and try again.';
+    return;
+  }
+  localStorage.setItem('navain_api_key', key);
+  window.NAVAIN_KEY = key;
+  msg.style.display = 'block';
+  msg.style.color = '#00e676';
+  msg.textContent = '✓ API key saved! Chatbot and voice demo are now active.';
+  loadApiKeyStatus();
+  setTimeout(function(){ msg.style.display = 'none'; }, 4000);
+}
+
+function clearApiKey(){
+  localStorage.removeItem('navain_api_key');
+  window.NAVAIN_KEY = '';
+  document.getElementById('api-key-input').value = '';
+  var msg = document.getElementById('api-key-msg');
+  msg.style.display = 'block';
+  msg.style.color = 'rgba(160,200,230,0.5)';
+  msg.textContent = 'API key cleared. Chatbot and voice demo will show contact info instead.';
+  loadApiKeyStatus();
+  setTimeout(function(){ msg.style.display = 'none'; }, 3000);
+}
+
+// Auto-load saved key on page load
 (function(){
-  fetch('/api/config')
-    .then(function(r){ return r.json(); })
-    .then(function(d){ if(d.key) window.NAVAIN_KEY = d.key; })
-    .catch(function(){});
+  var saved = localStorage.getItem('navain_api_key');
+  if(saved) window.NAVAIN_KEY = saved;
 })();
 
 function drawPortalChart(data, labels){
