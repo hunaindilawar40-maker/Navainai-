@@ -2409,44 +2409,31 @@ function drawPortalChart(data, labels){
       VD.setStatus('◆ Stacy is speaking...', '#00ff88');
       VD.setTranscript('Stacy: '+text, false);
 
-      var elevenKey = window.ELEVEN_KEY || '';
-      var voiceId = 'TYKLc7ViOIGE13dSZYlK';
-
-      // Use ElevenLabs if key available, fallback to browser
-      if(elevenKey) {
-        try {
-          var res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '/stream', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'xi-api-key': elevenKey
-            },
-            body: JSON.stringify({
-              text: text,
-              model_id: 'eleven_turbo_v2',
-              voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
-            })
-          });
-          if(res.ok) {
-            var blob = await res.blob();
-            var url = URL.createObjectURL(blob);
-            var audio = new Audio(url);
-            audio.onended = function(){
-              VD.speaking = false;
-              VD.setOrbState('idle');
-              VD.setStatus('Tap to speak again','rgba(160,200,230,0.5)');
-              URL.revokeObjectURL(url);
-            };
-            audio.onerror = function(){
-              VD.speaking = false;
-              VD.setOrbState('idle');
-              VD.setStatus('Tap to speak again','rgba(160,200,230,0.5)');
-            };
-            audio.play();
-            return;
-          }
-        } catch(e) {}
-      }
+      try {
+        var res = await fetch('/api/speak', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text })
+        });
+        if(res.ok) {
+          var blob = await res.blob();
+          var url = URL.createObjectURL(blob);
+          var audio = new Audio(url);
+          audio.onended = function(){
+            VD.speaking = false;
+            VD.setOrbState('idle');
+            VD.setStatus('Tap to speak again','rgba(160,200,230,0.5)');
+            URL.revokeObjectURL(url);
+          };
+          audio.onerror = function(){
+            VD.speaking = false;
+            VD.setOrbState('idle');
+            VD.setStatus('Tap to speak again','rgba(160,200,230,0.5)');
+          };
+          audio.play();
+          return;
+        }
+      } catch(e) {}
 
       // Fallback to browser speech
       if(!VD.synth) return;
