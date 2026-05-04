@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
   if(req.method === 'OPTIONS') return res.status(200).end();
 
   const { text } = req.body;
-  const voiceId = 'TYKLc7ViOIGE13dSZYlK';
+  const voiceId = 'auq43ws1oslv0tO4BDa7';
 
   try {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
