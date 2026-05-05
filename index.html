@@ -1396,6 +1396,19 @@ footer {
 })();
 </script>
 
+<script>
+// Auto-load API keys from Vercel environment
+(function(){
+  fetch('/api/config')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.key){ window.NAVAIN_KEY = d.key; }
+      if(d.elevenKey){ window.ELEVEN_KEY = d.elevenKey; }
+    })
+    .catch(function(){});
+})();
+</script>
+
 <!-- NAV -->
 <nav>
   <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
