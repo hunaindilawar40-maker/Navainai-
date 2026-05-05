@@ -165,6 +165,32 @@ nav {
   transform: translateY(-1px);
 }
 
+.nav-social-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-social-link {
+  width: 34px;
+  height: 34px;
+  background: rgba(0,200,255,0.06);
+  border: 1px solid rgba(0,200,255,0.18);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nav-social-link:hover {
+  background: rgba(0,200,255,0.15);
+  border-color: #00c8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,200,255,0.25);
+}
+
 /* ── HERO ── */
 .hero {
   position: relative;
@@ -1399,10 +1425,17 @@ footer {
     <li><a href="#voice-demo">Live Demo</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-  <button onclick="openLoginModal()" class="nav-login-btn">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    Login
-  </button>
+  <div class="nav-social-links">
+    <a href="https://www.linkedin.com/in/navain-ai-491078408" target="_blank" class="nav-social-link" title="LinkedIn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#00c8ff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="https://www.facebook.com/share/1ArY955KHo/" target="_blank" class="nav-social-link" title="Facebook">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#00c8ff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/navain.ai?igsh=amV0eGVlcDZsdTVj" target="_blank" class="nav-social-link" title="Instagram">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00c8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+  </div>
 </nav>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -1518,417 +1551,13 @@ footer {
 </script>
 
 <!-- LOGIN MODAL -->
-<div id="login-modal" style="display:none;position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.3);border-radius:22px;padding:48px 40px;width:100%;max-width:400px;position:relative;box-shadow:0 0 100px rgba(0,200,255,0.1),0 40px 80px rgba(0,0,0,0.6);">
-    <button onclick="closeLoginModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:rgba(160,200,230,0.3);font-size:26px;cursor:pointer;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#00c8ff'" onmouseout="this.style.color='rgba(160,200,230,0.3)'">×</button>
-    <div style="text-align:center;margin-bottom:36px;">
-      <div style="width:52px;height:52px;background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.35em;color:#00c8ff;text-transform:uppercase;margin-bottom:6px;">Admin Access</div>
-      <div style="font-family:Orbitron,monospace;font-size:20px;font-weight:900;background:linear-gradient(135deg,#fff,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Portal Login</div>
-    </div>
-    <div style="margin-bottom:18px;">
-      <label style="display:block;font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.25em;color:rgba(0,200,255,0.7);text-transform:uppercase;margin-bottom:8px;">Email</label>
-      <input id="login-email" type="email" placeholder="admin@example.com" autocomplete="username" style="width:100%;padding:13px 16px;background:#050a14;border:1px solid rgba(0,200,255,0.18);border-radius:9px;color:#e8f4ff;font-family:DM Sans,sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;box-sizing:border-box;" onfocus="this.style.borderColor='#00c8ff'" onblur="this.style.borderColor='rgba(0,200,255,0.18)'" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
-    </div>
-    <div style="margin-bottom:24px;">
-      <label style="display:block;font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.25em;color:rgba(0,200,255,0.7);text-transform:uppercase;margin-bottom:8px;">Password</label>
-      <input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding:13px 16px;background:#050a14;border:1px solid rgba(0,200,255,0.18);border-radius:9px;color:#e8f4ff;font-family:DM Sans,sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;box-sizing:border-box;" onfocus="this.style.borderColor='#00c8ff'" onblur="this.style.borderColor='rgba(0,200,255,0.18)'" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <div id="login-error" style="display:none;color:#ff6b6b;font-size:13px;text-align:center;margin-bottom:16px;font-family:Rajdhani,sans-serif;letter-spacing:0.04em;padding:10px;background:rgba(255,107,107,0.08);border-radius:8px;border:1px solid rgba(255,107,107,0.2);">⚠ Invalid credentials. Try again.</div>
-    <button onclick="doLogin()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00c8ff,#0055cc);color:#fff;font-family:Rajdhani,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;border:none;border-radius:9px;cursor:pointer;transition:all 0.3s;box-shadow:0 0 30px rgba(0,200,255,0.25);" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">Access Portal →</button>
-  </div>
-</div>
 
-<!-- MONITORING PORTAL -->
-<div id="admin-portal" style="display:none;position:fixed;inset:0;z-index:999998;background:#050a14;overflow-y:auto;">
 
-  <!-- Portal Topbar -->
-  <div style="background:rgba(5,10,20,0.97);border-bottom:1px solid rgba(0,200,255,0.12);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;backdrop-filter:blur(20px);">
-    <div style="display:flex;align-items:center;gap:14px;">
-      <div style="display:flex;align-items:center;gap:7px;">
-        <div style="width:7px;height:7px;background:#00e676;border-radius:50%;animation:blink 2s infinite;box-shadow:0 0 8px #00e676;"></div>
-        <span style="font-family:Orbitron,monospace;font-size:12px;font-weight:900;letter-spacing:0.18em;background:linear-gradient(135deg,#fff,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">NAVAIN AI · ANALYTICS PORTAL</span>
-      </div>
-      <div style="height:16px;width:1px;background:rgba(0,200,255,0.15);"></div>
-      <span style="font-family:Rajdhani,sans-serif;font-size:11px;letter-spacing:0.1em;color:rgba(0,200,255,0.4);">SELF-HOSTED TRACKER</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:16px;">
-      <span id="portal-clock" style="font-family:Rajdhani,sans-serif;font-size:12px;letter-spacing:0.08em;color:rgba(160,200,230,0.4);"></span>
-      <button onclick="portalRefresh()" style="background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.2);color:#00c8ff;font-family:Rajdhani,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,200,255,0.15)'" onmouseout="this.style.background='rgba(0,200,255,0.08)'">↻ Refresh</button>
-      <button onclick="closePortal()" style="background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.25);color:#ff4d6d;font-family:Rajdhani,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:7px 14px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,77,109,0.2)'" onmouseout="this.style.background='rgba(255,77,109,0.1)'">Logout</button>
-    </div>
-  </div>
 
-  <div style="padding:24px 28px;max-width:1400px;margin:0 auto;">
 
-    <!-- KPI Row -->
-    <div id="portal-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;"></div>
 
-    <!-- Charts + Sections -->
-    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:14px;margin-bottom:20px;">
-      <!-- 7-day bar chart -->
-      <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:22px;">
-        <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,200,255,0.5);margin-bottom:4px;">Traffic History</div>
-        <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:18px;">Daily Visitors — Last 7 Days</div>
-        <canvas id="portal-chart" height="160" style="width:100%;display:block;"></canvas>
-      </div>
-      <!-- Top Sections -->
-      <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:22px;">
-        <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,200,255,0.5);margin-bottom:4px;">Navigation</div>
-        <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:18px;">Top Sections Visited</div>
-        <div id="portal-sections" style="display:flex;flex-direction:column;gap:11px;"></div>
-      </div>
-    </div>
 
-    <!-- Bottom row -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
-      <!-- Devices -->
-      <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:22px;">
-        <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,200,255,0.5);margin-bottom:4px;">Devices</div>
-        <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:18px;">Visitor Breakdown</div>
-        <div id="portal-devices" style="display:flex;flex-direction:column;gap:14px;"></div>
-      </div>
-      <!-- Referrers -->
-      <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:22px;">
-        <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,200,255,0.5);margin-bottom:4px;">Traffic Sources</div>
-        <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:18px;">Where Visitors Come From</div>
-        <div id="portal-referrers" style="display:flex;flex-direction:column;gap:11px;"></div>
-      </div>
-      <!-- Chatbot -->
-      <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:22px;">
-        <div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,200,255,0.5);margin-bottom:4px;">Stacy Chatbot</div>
-        <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:18px;">Engagement Stats</div>
-        <div id="portal-chats" style="display:flex;flex-direction:column;gap:14px;"></div>
-      </div>
-    </div>
 
-    <!-- API Key Config -->
-    <div style="background:#0a1628;border:1px solid rgba(0,200,255,0.18);border-radius:14px;padding:22px 24px;margin-bottom:20px;">
-      <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;">
-        <div style="width:40px;height:40px;background:rgba(0,200,255,0.08);border:1px solid rgba(0,200,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🔑</div>
-        <div>
-          <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:#e8f4ff;margin-bottom:4px;">Anthropic API Key</div>
-          <div style="font-family:DM Sans,sans-serif;font-size:12px;color:rgba(160,200,230,0.45);line-height:1.5;">Powers the Stacy chatbot and live voice demo. Stored only in this browser — never sent to any server. Get your key at <span style="color:#00c8ff;">console.anthropic.com</span></div>
-        </div>
-        <div id="api-key-badge" style="flex-shrink:0;font-family:Rajdhani,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;padding:4px 12px;border-radius:20px;"></div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;">
-        <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." style="flex:1;padding:12px 16px;background:#050a14;border:1px solid rgba(0,200,255,0.18);border-radius:9px;color:#e8f4ff;font-family:DM Sans,sans-serif;font-size:13px;outline:none;transition:border-color 0.3s;box-sizing:border-box;" onfocus="this.style.borderColor='#00c8ff'" onblur="this.style.borderColor='rgba(0,200,255,0.18)'" onkeydown="if(event.key==='Enter')saveApiKey()" />
-        <button onclick="saveApiKey()" style="padding:12px 22px;background:linear-gradient(135deg,#00c8ff,#0055cc);color:#fff;font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;border:none;border-radius:9px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Save & Activate</button>
-        <button onclick="clearApiKey()" style="padding:12px 16px;background:transparent;color:rgba(255,77,109,0.6);font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border:1px solid rgba(255,77,109,0.2);border-radius:9px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,77,109,0.5)';this.style.color='#ff4d6d'" onmouseout="this.style.borderColor='rgba(255,77,109,0.2)';this.style.color='rgba(255,77,109,0.6)'">Clear</button>
-      </div>
-      <div id="api-key-msg" style="margin-top:10px;font-family:Rajdhani,sans-serif;font-size:12px;display:none;"></div>
-    </div>
-
-    <!-- Clear data -->
-    <div style="text-align:center;padding-bottom:32px;">
-      <button onclick="if(confirm('Reset all tracker data?')){localStorage.removeItem('navain_tracker_v1');portalRefresh();}" style="background:transparent;border:1px solid rgba(255,77,109,0.2);color:rgba(255,77,109,0.5);font-family:Rajdhani,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,77,109,0.5)';this.style.color='#ff4d6d'" onmouseout="this.style.borderColor='rgba(255,77,109,0.2)';this.style.color='rgba(255,77,109,0.5)'">⚠ Reset All Data</button>
-      <p style="font-family:Rajdhani,sans-serif;font-size:11px;color:rgba(160,200,230,0.25);margin-top:10px;letter-spacing:0.06em;">Data stored locally in this browser. Persists across sessions on this device.</p>
-    </div>
-
-  </div>
-</div>
-
-<style>
-.nav-login-btn {
-  display:flex;align-items:center;gap:6px;
-  font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;
-  letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(160,200,230,0.55);background:transparent;
-  border:1px solid rgba(0,200,255,0.14);
-  padding:8px 16px;border-radius:6px;cursor:pointer;
-  transition:all 0.3s;margin-right:10px;
-}
-.nav-login-btn:hover { color:#00c8ff;border-color:rgba(0,200,255,0.4);background:rgba(0,200,255,0.05); }
-</style>
-
-<script>
-// ── AUTH ──
-var _ADMIN_EMAIL = 'revenuepartners.co@gmail.com';
-var _ADMIN_PASS  = '786@Navain';
-
-function openLoginModal(){
-  var m = document.getElementById('login-modal');
-  m.style.display = 'flex';
-  document.getElementById('login-error').style.display = 'none';
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-pass').value = '';
-  setTimeout(function(){ document.getElementById('login-email').focus(); }, 80);
-}
-function closeLoginModal(){
-  document.getElementById('login-modal').style.display = 'none';
-}
-document.getElementById('login-modal').addEventListener('click', function(e){
-  if(e.target === this) closeLoginModal();
-});
-function doLogin(){
-  var e = document.getElementById('login-email').value.trim();
-  var p = document.getElementById('login-pass').value;
-  if(e === _ADMIN_EMAIL && p === _ADMIN_PASS){
-    closeLoginModal();
-    openPortal();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-    document.getElementById('login-pass').value = '';
-    document.getElementById('login-pass').focus();
-  }
-}
-
-// ── PORTAL ──
-function openPortal(){
-  document.getElementById('admin-portal').style.display = 'block';
-  document.body.style.overflow = 'hidden';
-  portalRefresh();
-  startPortalClock();
-  loadApiKeyStatus();
-}
-function closePortal(){
-  document.getElementById('admin-portal').style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-var _portalClockTimer = null;
-function startPortalClock(){
-  if(_portalClockTimer) return;
-  function tick(){
-    var el = document.getElementById('portal-clock');
-    if(el) el.textContent = new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  }
-  tick();
-  _portalClockTimer = setInterval(tick, 1000);
-}
-
-function portalRefresh(){
-  var db = window.NAVAIN_TRACKER ? window.NAVAIN_TRACKER.getDB() : {};
-  var today = window.NAVAIN_TRACKER ? window.NAVAIN_TRACKER.todayKey() : new Date().toISOString().slice(0,10);
-
-  // Build last 7 days keys
-  var days7 = [];
-  for(var i=6;i>=0;i--){
-    var d = new Date(); d.setDate(d.getDate()-i);
-    days7.push(d.toISOString().slice(0,10));
-  }
-
-  var todayData = (db.days && db.days[today]) || { visitors:0, views:0, bounced:0, duration:[] };
-  var totalVisitors = 0, totalViews = 0;
-  if(db.days) Object.values(db.days).forEach(function(d){ totalVisitors+=d.visitors||0; totalViews+=d.views||0; });
-
-  var avgDur = 0;
-  if(todayData.duration && todayData.duration.length){
-    avgDur = Math.round(todayData.duration.reduce(function(a,b){return a+b;},0)/todayData.duration.length);
-  }
-  var avgDurStr = Math.floor(avgDur/60)+':'+(avgDur%60).toString().padStart(2,'0');
-
-  var bounceRate = todayData.visitors > 0 ? Math.round((todayData.bounced/todayData.visitors)*100) : 0;
-
-  // KPIs
-  var kpis = [
-    { label:'Visitors Today', value: todayData.visitors, sub: totalVisitors+' total all-time', color:'#00c8ff', icon:'👤' },
-    { label:'Page Views Today', value: todayData.views, sub: totalViews+' total all-time', color:'#00c8ff', icon:'👁' },
-    { label:'Avg. Session', value: todayData.duration.length ? avgDurStr : '—', sub: todayData.duration.length+' sessions recorded', color:'#00e676', icon:'⏱' },
-    { label:'Bounce Rate', value: bounceRate+'%', sub: 'Today · industry avg 45%', color: bounceRate > 60 ? '#ff6b6b':'#00e676', icon:'↩' },
-  ];
-  document.getElementById('portal-kpis').innerHTML = kpis.map(function(k){
-    return '<div style="background:#0a1628;border:1px solid rgba(0,200,255,0.12);border-radius:14px;padding:20px 22px;">' +
-      '<div style="font-size:18px;margin-bottom:8px;">'+k.icon+'</div>'+
-      '<div style="font-family:Rajdhani,sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:rgba(160,200,230,0.45);margin-bottom:8px;">'+k.label+'</div>'+
-      '<div style="font-family:Orbitron,monospace;font-size:28px;font-weight:900;color:'+k.color+';text-shadow:0 0 16px '+k.color+'55;">'+k.value+'</div>'+
-      '<div style="font-family:Rajdhani,sans-serif;font-size:11px;color:rgba(160,200,230,0.35);margin-top:6px;">'+k.sub+'</div>'+
-    '</div>';
-  }).join('');
-
-  // Chart
-  var chartData = days7.map(function(dk){
-    return db.days && db.days[dk] ? (db.days[dk].visitors||0) : 0;
-  });
-  var chartLabels = days7.map(function(dk){
-    var d = new Date(dk+'T12:00:00');
-    return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
-  });
-  drawPortalChart(chartData, chartLabels);
-
-  // Sections
-  var sections = db.sections || {};
-  var secArr = Object.entries(sections).sort(function(a,b){return b[1]-a[1];}).slice(0,6);
-  var secMax = secArr.length ? secArr[0][1] : 1;
-  document.getElementById('portal-sections').innerHTML = secArr.length ?
-    secArr.map(function(s){
-      return '<div>'+
-        '<div style="display:flex;justify-content:space-between;margin-bottom:5px;">'+
-          '<span style="font-family:Rajdhani,sans-serif;font-size:12px;color:#e8f4ff;">'+s[0]+'</span>'+
-          '<span style="font-family:Orbitron,monospace;font-size:11px;color:#00c8ff;">'+s[1]+'</span>'+
-        '</div>'+
-        '<div style="height:3px;background:rgba(0,200,255,0.08);border-radius:2px;">'+
-          '<div style="height:100%;width:'+Math.round((s[1]/secMax)*100)+'%;background:linear-gradient(90deg,#00c8ff,#0055cc);border-radius:2px;"></div>'+
-        '</div>'+
-      '</div>';
-    }).join('') :
-    '<div style="font-family:Rajdhani,sans-serif;font-size:12px;color:rgba(160,200,230,0.3);text-align:center;padding:20px 0;">No section data yet.<br>Visit pages to populate.</div>';
-
-  // Devices
-  var devs = db.devices || {};
-  var devTotal = Object.values(devs).reduce(function(a,b){return a+b;},0)||1;
-  var devIcons = { Mobile:'📱', Desktop:'💻', Tablet:'📟' };
-  document.getElementById('portal-devices').innerHTML = Object.keys(devIcons).map(function(d){
-    var v = devs[d]||0;
-    var pct = Math.round((v/devTotal)*100);
-    return '<div>'+
-      '<div style="display:flex;justify-content:space-between;margin-bottom:5px;">'+
-        '<span style="font-family:Rajdhani,sans-serif;font-size:12px;color:#e8f4ff;">'+devIcons[d]+' '+d+'</span>'+
-        '<span style="font-family:Orbitron,monospace;font-size:11px;color:#00c8ff;">'+pct+'%</span>'+
-      '</div>'+
-      '<div style="height:4px;background:rgba(0,200,255,0.08);border-radius:2px;">'+
-        '<div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#00c8ff,#0055cc);border-radius:2px;"></div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
-
-  // Referrers
-  var refs = db.referrers || {};
-  var refArr = Object.entries(refs).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
-  var refMax = refArr.length ? refArr[0][1] : 1;
-  document.getElementById('portal-referrers').innerHTML = refArr.length ?
-    refArr.map(function(r){
-      return '<div>'+
-        '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'+
-          '<span style="font-family:Rajdhani,sans-serif;font-size:12px;color:#e8f4ff;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r[0]+'</span>'+
-          '<span style="font-family:Orbitron,monospace;font-size:11px;color:#00c8ff;">'+r[1]+'</span>'+
-        '</div>'+
-        '<div style="height:3px;background:rgba(0,200,255,0.08);border-radius:2px;">'+
-          '<div style="height:100%;width:'+Math.round((r[1]/refMax)*100)+'%;background:linear-gradient(90deg,#00c8ff,#0055cc);border-radius:2px;"></div>'+
-        '</div>'+
-      '</div>';
-    }).join('') :
-    '<div style="font-family:Rajdhani,sans-serif;font-size:12px;color:rgba(160,200,230,0.3);text-align:center;padding:20px 0;">No referrer data yet.</div>';
-
-  // Chat stats
-  var chats = db.chats || { opens:0, messages:0, leads:0 };
-  var chatItems = [
-    { label:'Chat Opens', value:chats.opens, color:'#00c8ff' },
-    { label:'Messages Sent', value:chats.messages, color:'#00c8ff' },
-    { label:'Leads Captured', value:chats.leads, color:'#00e676' },
-    { label:'Engagement Rate', value:chats.opens?Math.round((chats.messages/chats.opens)*10)/10+'x':'—', color:'#ffd700' },
-  ];
-  document.getElementById('portal-chats').innerHTML = chatItems.map(function(c){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,200,255,0.06);">'+
-      '<span style="font-family:Rajdhani,sans-serif;font-size:12px;color:rgba(160,200,230,0.6);">'+c.label+'</span>'+
-      '<span style="font-family:Orbitron,monospace;font-size:15px;font-weight:700;color:'+c.color+';">'+c.value+'</span>'+
-    '</div>';
-  }).join('');
-}
-
-// ── API KEY MANAGEMENT ──
-function loadApiKeyStatus(){
-  var saved = localStorage.getItem('navain_api_key') || '';
-  var badge = document.getElementById('api-key-badge');
-  var input = document.getElementById('api-key-input');
-  if(saved){
-    window.NAVAIN_KEY = saved;
-    input.value = saved;
-    badge.textContent = '✓ Active';
-    badge.style.background = 'rgba(0,230,118,0.12)';
-    badge.style.color = '#00e676';
-    badge.style.border = '1px solid rgba(0,230,118,0.25)';
-  } else {
-    badge.textContent = '✗ Not Set';
-    badge.style.background = 'rgba(255,77,109,0.1)';
-    badge.style.color = '#ff4d6d';
-    badge.style.border = '1px solid rgba(255,77,109,0.2)';
-  }
-}
-
-function saveApiKey(){
-  var key = document.getElementById('api-key-input').value.trim();
-  var msg = document.getElementById('api-key-msg');
-  if(!key){
-    msg.style.display = 'block';
-    msg.style.color = '#ff6b6b';
-    msg.textContent = '⚠ Please paste your API key first.';
-    return;
-  }
-  if(!key.startsWith('gsk_')){
-    msg.style.display = 'block';
-    msg.style.color = '#ff6b6b';
-    msg.textContent = '⚠ Key should start with gsk_... Please check and try again.';
-    return;
-  }
-  localStorage.setItem('navain_api_key', key);
-  window.NAVAIN_KEY = key;
-  msg.style.display = 'block';
-  msg.style.color = '#00e676';
-  msg.textContent = '✓ API key saved! Chatbot and voice demo are now active.';
-  loadApiKeyStatus();
-  setTimeout(function(){ msg.style.display = 'none'; }, 4000);
-}
-
-function clearApiKey(){
-  localStorage.removeItem('navain_api_key');
-  window.NAVAIN_KEY = '';
-  document.getElementById('api-key-input').value = '';
-  var msg = document.getElementById('api-key-msg');
-  msg.style.display = 'block';
-  msg.style.color = 'rgba(160,200,230,0.5)';
-  msg.textContent = 'API key cleared. Chatbot and voice demo will show contact info instead.';
-  loadApiKeyStatus();
-  setTimeout(function(){ msg.style.display = 'none'; }, 3000);
-}
-
-// Auto-load key from Vercel environment via /api/config
-(function(){
-  fetch('/api/config')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d.key){ window.NAVAIN_KEY = d.key; }
-      if(d.elevenKey){ window.ELEVEN_KEY = d.elevenKey; }
-    })
-    .catch(function(){});
-})();
-
-function drawPortalChart(data, labels){
-  var canvas = document.getElementById('portal-chart');
-  if(!canvas) return;
-  var W = canvas.offsetWidth || 600;
-  canvas.width = W; canvas.height = 160;
-  var ctx = canvas.getContext('2d');
-  var padL=36,padR=12,padT=12,padB=28;
-  var cW=W-padL-padR, cH=160-padT-padB;
-  var maxV = Math.max.apply(null,data.concat([1]));
-
-  // Grid lines
-  for(var gi=0;gi<=3;gi++){
-    var gy=padT+(cH/3)*gi;
-    ctx.strokeStyle='rgba(0,200,255,0.05)';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(W-padR,gy);ctx.stroke();
-    ctx.fillStyle='rgba(160,200,230,0.25)';ctx.font='9px Rajdhani,sans-serif';ctx.textAlign='right';
-    ctx.fillText(Math.round(maxV*(1-gi/3)),padL-4,gy+3);
-  }
-
-  // Bars
-  var bW=Math.max(8,Math.floor(cW/data.length)-6);
-  data.forEach(function(v,i){
-    var bH=v>0?Math.max(3,Math.round((v/maxV)*cH)):2;
-    var x=padL+i*(cW/(data.length-1||1))-bW/2+cW/(data.length*2);
-    var y=padT+cH-bH;
-    var grad=ctx.createLinearGradient(0,y,0,padT+cH);
-    grad.addColorStop(0,'rgba(0,200,255,0.8)');
-    grad.addColorStop(1,'rgba(0,85,204,0.3)');
-    ctx.fillStyle=grad;
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(x,y,bW,bH,3) : ctx.rect(x,y,bW,bH);
-    ctx.fill();
-    // Glow on top
-    if(v>0){
-      ctx.fillStyle='rgba(0,200,255,0.6)';
-      ctx.fillRect(x,y,bW,2);
-    }
-    // Label
-    ctx.fillStyle='rgba(160,200,230,0.4)';ctx.font='9px Rajdhani,sans-serif';ctx.textAlign='center';
-    ctx.fillText(labels[i],padL+i*(cW/(data.length-1||1))+cW/(data.length*2),160-padB+14);
-  });
-}
-</script>
 
 <!-- HERO -->
 <div class="hero">
@@ -2585,6 +2214,9 @@ function drawPortalChart(data, labels){
         <div>
           <div class="contact-label">Follow Us</div>
           <div class="social-links" style="margin-top:8px;">
+            <a href="https://www.linkedin.com/in/navain-ai-491078408" target="_blank" class="social-link" title="LinkedIn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#00c8ff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
             <a href="https://www.facebook.com/share/1ArY955KHo/" target="_blank" class="social-link" title="Facebook">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#00c8ff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
@@ -2666,6 +2298,9 @@ function drawPortalChart(data, labels){
     <li><a href="#contact">Contact</a></li>
   </ul>
     <div class="social-links">
+    <a href="https://www.linkedin.com/in/navain-ai-491078408" target="_blank" class="social-link" title="LinkedIn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#00c8ff"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
     <a href="https://www.facebook.com/share/1ArY955KHo/" target="_blank" class="social-link" title="Facebook">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="#00c8ff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
     </a>
@@ -3021,6 +2656,107 @@ function handlePopupSubmit(e){
   });
 }
 
+</script>
+
+<!-- ── GLOWING ORB CURSOR ── -->
+<style>
+* { cursor: none !important; }
+#orb-cursor {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999999;
+  top: 0; left: 0;
+  width: 18px; height: 18px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff, #00c8ff 40%, #0050cc);
+  box-shadow:
+    0 0 8px 3px rgba(0,200,255,0.9),
+    0 0 22px 8px rgba(0,200,255,0.55),
+    0 0 50px 18px rgba(0,200,255,0.2);
+  transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
+  will-change: transform;
+}
+#orb-trail-wrap {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 9999998;
+}
+.orb-trail {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,255,0.55), transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: trailFade 0.55s ease-out forwards;
+}
+@keyframes trailFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+}
+</style>
+
+<div id="orb-cursor"></div>
+<div id="orb-trail-wrap"></div>
+
+<script>
+(function(){
+  var orb = document.getElementById('orb-cursor');
+  var wrap = document.getElementById('orb-trail-wrap');
+  var mx = -200, my = -200;
+  var trailInterval = null;
+
+  document.addEventListener('mousemove', function(e){
+    mx = e.clientX; my = e.clientY;
+    orb.style.left = mx + 'px';
+    orb.style.top  = my + 'px';
+  });
+
+  // Trail particles
+  function spawnTrail(){
+    var t = document.createElement('div');
+    var sz = 10 + Math.random() * 14;
+    t.className = 'orb-trail';
+    t.style.width  = sz + 'px';
+    t.style.height = sz + 'px';
+    t.style.left   = mx + 'px';
+    t.style.top    = my + 'px';
+    wrap.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 560);
+  }
+  setInterval(spawnTrail, 45);
+
+  // Hover expand on links/buttons
+  document.addEventListener('mouseover', function(e){
+    if(e.target.closest('a, button, [onclick], input, textarea, select')){
+      orb.style.width  = '32px';
+      orb.style.height = '32px';
+      orb.style.boxShadow = '0 0 14px 6px rgba(0,200,255,1), 0 0 40px 16px rgba(0,200,255,0.6), 0 0 80px 30px rgba(0,200,255,0.25)';
+    }
+  });
+  document.addEventListener('mouseout', function(e){
+    if(e.target.closest('a, button, [onclick], input, textarea, select')){
+      orb.style.width  = '18px';
+      orb.style.height = '18px';
+      orb.style.boxShadow = '0 0 8px 3px rgba(0,200,255,0.9), 0 0 22px 8px rgba(0,200,255,0.55), 0 0 50px 18px rgba(0,200,255,0.2)';
+    }
+  });
+
+  // Click burst
+  document.addEventListener('mousedown', function(){
+    orb.style.transform = 'translate(-50%,-50%) scale(0.7)';
+    orb.style.boxShadow = '0 0 24px 10px rgba(0,200,255,1), 0 0 60px 24px rgba(0,200,255,0.7), 0 0 100px 40px rgba(0,200,255,0.3)';
+  });
+  document.addEventListener('mouseup', function(){
+    orb.style.transform = 'translate(-50%,-50%) scale(1)';
+    orb.style.boxShadow = '0 0 8px 3px rgba(0,200,255,0.9), 0 0 22px 8px rgba(0,200,255,0.55), 0 0 50px 18px rgba(0,200,255,0.2)';
+  });
+
+  // Hide when leaving window
+  document.addEventListener('mouseleave', function(){ orb.style.opacity = '0'; });
+  document.addEventListener('mouseenter', function(){ orb.style.opacity = '1'; });
+})();
 </script>
 
 </body>
