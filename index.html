@@ -2658,104 +2658,92 @@ function handlePopupSubmit(e){
 
 </script>
 
-<!-- ── GLOWING ORB CURSOR ── -->
+<!-- ── CYAN CURSOR + NEON TRAIL ── -->
 <style>
 * { cursor: none !important; }
-#orb-cursor {
+#dot-cursor {
   pointer-events: none;
   position: fixed;
   z-index: 9999999;
   top: 0; left: 0;
-  width: 18px; height: 18px;
-  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  background: #00c8ff;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffffff, #00c8ff 40%, #0050cc);
-  box-shadow:
-    0 0 8px 3px rgba(0,200,255,0.9),
-    0 0 22px 8px rgba(0,200,255,0.55),
-    0 0 50px 18px rgba(0,200,255,0.2);
-  transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
-  will-change: transform;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px 2px rgba(0,200,255,0.9), 0 0 14px 4px rgba(0,200,255,0.4);
+  transition: width 0.15s, height 0.15s, box-shadow 0.15s;
 }
-#orb-trail-wrap {
+.neon-trail {
   pointer-events: none;
   position: fixed;
-  top: 0; left: 0;
-  z-index: 9999998;
-}
-.orb-trail {
-  position: fixed;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,200,255,0.55), transparent 70%);
   transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: trailFade 0.55s ease-out forwards;
+  animation: neonFade 0.7s ease-out forwards;
+  z-index: 9999997;
 }
-@keyframes trailFade {
-  0%   { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+@keyframes neonFade {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
 }
 </style>
 
-<div id="orb-cursor"></div>
-<div id="orb-trail-wrap"></div>
+<div id="dot-cursor"></div>
 
 <script>
 (function(){
-  var orb = document.getElementById('orb-cursor');
-  var wrap = document.getElementById('orb-trail-wrap');
-  var mx = -200, my = -200;
-  var trailInterval = null;
+  var dot = document.getElementById('dot-cursor');
+  var mx = -300, my = -300;
+  var hue = 0;
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'pointer-events:none;position:fixed;top:0;left:0;z-index:9999998;';
+  document.body.appendChild(wrap);
+
+  // Neon color cycle — cyan → green → yellow → magenta → purple → back
+  var neonColors = [
+    '#00c8ff', '#00ffea', '#00ff88', '#aaff00',
+    '#ffee00', '#ff6600', '#ff00cc', '#cc00ff', '#6600ff'
+  ];
+  var colorIndex = 0;
 
   document.addEventListener('mousemove', function(e){
     mx = e.clientX; my = e.clientY;
-    orb.style.left = mx + 'px';
-    orb.style.top  = my + 'px';
-  });
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
 
-  // Trail particles
-  function spawnTrail(){
+    // Spawn trail dot
     var t = document.createElement('div');
-    var sz = 10 + Math.random() * 14;
-    t.className = 'orb-trail';
+    var sz = 6 + Math.random() * 6;
+    var color = neonColors[colorIndex % neonColors.length];
+    colorIndex++;
+    t.className = 'neon-trail';
     t.style.width  = sz + 'px';
     t.style.height = sz + 'px';
     t.style.left   = mx + 'px';
     t.style.top    = my + 'px';
+    t.style.background = color;
+    t.style.boxShadow  = '0 0 6px 2px ' + color + ', 0 0 14px 4px ' + color + '88';
     wrap.appendChild(t);
-    setTimeout(function(){ t.remove(); }, 560);
-  }
-  setInterval(spawnTrail, 45);
+    setTimeout(function(){ t.remove(); }, 700);
+  });
 
-  // Hover expand on links/buttons
+  // Grow on hover
   document.addEventListener('mouseover', function(e){
     if(e.target.closest('a, button, [onclick], input, textarea, select')){
-      orb.style.width  = '32px';
-      orb.style.height = '32px';
-      orb.style.boxShadow = '0 0 14px 6px rgba(0,200,255,1), 0 0 40px 16px rgba(0,200,255,0.6), 0 0 80px 30px rgba(0,200,255,0.25)';
+      dot.style.width = '18px';
+      dot.style.height = '18px';
+      dot.style.boxShadow = '0 0 10px 4px rgba(0,200,255,1), 0 0 28px 8px rgba(0,200,255,0.5)';
     }
   });
   document.addEventListener('mouseout', function(e){
     if(e.target.closest('a, button, [onclick], input, textarea, select')){
-      orb.style.width  = '18px';
-      orb.style.height = '18px';
-      orb.style.boxShadow = '0 0 8px 3px rgba(0,200,255,0.9), 0 0 22px 8px rgba(0,200,255,0.55), 0 0 50px 18px rgba(0,200,255,0.2)';
+      dot.style.width = '10px';
+      dot.style.height = '10px';
+      dot.style.boxShadow = '0 0 6px 2px rgba(0,200,255,0.9), 0 0 14px 4px rgba(0,200,255,0.4)';
     }
   });
 
-  // Click burst
-  document.addEventListener('mousedown', function(){
-    orb.style.transform = 'translate(-50%,-50%) scale(0.7)';
-    orb.style.boxShadow = '0 0 24px 10px rgba(0,200,255,1), 0 0 60px 24px rgba(0,200,255,0.7), 0 0 100px 40px rgba(0,200,255,0.3)';
-  });
-  document.addEventListener('mouseup', function(){
-    orb.style.transform = 'translate(-50%,-50%) scale(1)';
-    orb.style.boxShadow = '0 0 8px 3px rgba(0,200,255,0.9), 0 0 22px 8px rgba(0,200,255,0.55), 0 0 50px 18px rgba(0,200,255,0.2)';
-  });
-
-  // Hide when leaving window
-  document.addEventListener('mouseleave', function(){ orb.style.opacity = '0'; });
-  document.addEventListener('mouseenter', function(){ orb.style.opacity = '1'; });
+  document.addEventListener('mouseleave', function(){ dot.style.opacity = '0'; });
+  document.addEventListener('mouseenter', function(){ dot.style.opacity = '1'; });
 })();
 </script>
 
