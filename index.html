@@ -1301,6 +1301,133 @@ footer {
 
 </style>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="dd37d334-dd82-4e78-827a-e001ab807f6c"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ── 3D HERO CANVAS ── */
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── 3D CARD TILT ── */
+.step-card, .feature-card, .pricing-card, .testimonial-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.15s ease, box-shadow 0.3s, border-color 0.3s;
+}
+
+/* ── 3D HEX LOGO ── */
+.hero-logo-3d {
+  perspective: 600px;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 40px;
+  cursor: pointer;
+}
+
+.hex-prism {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: hexSpin 12s linear infinite;
+  position: relative;
+}
+
+.hex-prism:hover {
+  animation-play-state: paused;
+}
+
+@keyframes hexSpin {
+  0%   { transform: rotateY(0deg) rotateX(15deg); }
+  100% { transform: rotateY(360deg) rotateX(15deg); }
+}
+
+.hex-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hex-face svg {
+  filter: drop-shadow(0 0 12px rgba(0,200,255,0.8));
+}
+
+.hex-face-front  { transform: translateZ(20px); }
+.hex-face-back   { transform: rotateY(180deg) translateZ(20px); }
+.hex-face-left   { transform: rotateY(-90deg) translateZ(20px); opacity: 0.5; }
+.hex-face-right  { transform: rotateY(90deg)  translateZ(20px); opacity: 0.5; }
+
+/* 3D floating animation for hex logo */
+@keyframes float3d {
+  0%, 100% { transform: translateY(0px) rotateX(0deg); }
+  50%       { transform: translateY(-8px) rotateX(3deg); }
+}
+
+.hero-logo-3d .hex-prism {
+  animation: hexSpin 12s linear infinite, float3d 4s ease-in-out infinite;
+}
+
+/* ── TILT CARD GLOW LAYER ── */
+.step-card .card-shine,
+.feature-card .card-shine,
+.pricing-card .card-shine,
+.testimonial-card .card-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(0,200,255,0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.step-card:hover .card-shine,
+.feature-card:hover .card-shine,
+.pricing-card:hover .card-shine,
+.testimonial-card:hover .card-shine {
+  opacity: 1;
+}
+
+/* ── 3D STATS COUNTER ── */
+.stat {
+  transform-style: preserve-3d;
+  transition: transform 0.3s;
+}
+.stat:hover {
+  transform: translateZ(16px) scale(1.05);
+}
+
+/* ── SECTION 3D DEPTH LINE ── */
+.section-3d-border {
+  position: absolute;
+  bottom: -1px;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.3), transparent);
+  transform: perspective(400px) rotateX(-60deg);
+  transform-origin: bottom;
+}
+
+/* ── 3D PARALLAX HERO TEXT ── */
+.hero-content {
+  transform-style: preserve-3d;
+}
+
+/* ── CTA BANNER 3D ── */
+.cta-banner {
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s;
+}
+.cta-banner:hover {
+  transform: perspective(1200px) rotateX(2deg) translateY(-4px);
+  box-shadow: 0 30px 80px rgba(0,200,255,0.15), 0 0 0 1px rgba(0,200,255,0.2);
+}
+</style>
 </head>
 <body>
 <div class="page-wrap">
@@ -1574,10 +1701,46 @@ footer {
 
 <!-- HERO -->
 <div class="hero">
+  <canvas id="hero-canvas"></canvas>
   <div class="hero-glow"></div>
   <div class="hero-content">
     <div class="hero-badge"><div class="dot"></div>AI-Powered Voice Agents</div>
-    <div class="hero-logo">
+    <div class="hero-logo-3d">
+      <div class="hex-prism">
+        <div class="hex-face hex-face-front">
+          <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;">
+            <polygon points="36,4 64,20 64,52 36,68 8,52 8,20" fill="rgba(0,200,255,0.08)" stroke="url(#hg3d)" stroke-width="1.5"/>
+            <polygon points="36,14 56,25 56,47 36,58 16,47 16,25" fill="none" stroke="rgba(0,200,255,0.2)" stroke-width="1"/>
+            <path d="M24 48 L24 24 L36 42 L48 24 L48 48" stroke="url(#hn3d)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="36" cy="36" r="3" fill="#00c8ff"/>
+            <circle cx="36" cy="36" r="7" fill="none" stroke="rgba(0,200,255,0.3)" stroke-width="1"/>
+            <defs>
+              <linearGradient id="hg3d" x1="8" y1="4" x2="64" y2="68" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00c8ff"/><stop offset="100%" stop-color="#0050cc"/></linearGradient>
+              <linearGradient id="hn3d" x1="24" y1="24" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#00c8ff"/></linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="hex-face hex-face-back">
+          <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:80px;">
+            <polygon points="36,4 64,20 64,52 36,68 8,52 8,20" fill="rgba(0,200,255,0.05)" stroke="rgba(0,200,255,0.5)" stroke-width="1.5"/>
+            <circle cx="36" cy="36" r="10" fill="none" stroke="rgba(0,200,255,0.4)" stroke-width="1"/>
+            <circle cx="36" cy="36" r="3" fill="#00c8ff" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="hex-face hex-face-left">
+          <svg viewBox="0 0 72 72" fill="none" style="width:80px;height:80px;">
+            <line x1="36" y1="10" x2="36" y2="62" stroke="rgba(0,200,255,0.3)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="hex-face hex-face-right">
+          <svg viewBox="0 0 72 72" fill="none" style="width:80px;height:80px;">
+            <line x1="36" y1="10" x2="36" y2="62" stroke="rgba(0,200,255,0.3)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <!-- keep old hero-logo hidden for orbit ring fallback -->
+    <div class="hero-logo" style="display:none;">
       <div class="icon-wrap">
         <div class="orbit-ring"><div class="orbit-dot"></div></div>
         <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
@@ -1621,25 +1784,29 @@ footer {
   <h2 class="section-title">How It Works</h2>
   <p class="section-sub">Getting started with Navain AI is simple. We handle everything — you just watch your business grow.</p>
   <div class="steps-grid">
-    <div class="step-card fade-in">
+    <div class="step-card fade-in tilt-card">
+      <div class="card-shine"></div>
       <div class="step-num">STEP 01</div>
       <div class="step-icon">📞</div>
       <div class="step-title">You Get a Call</div>
       <p class="step-desc">A customer calls your business number during rush hours or after hours when your team is unavailable.</p>
     </div>
-    <div class="step-card fade-in" style="transition-delay:0.1s">
+    <div class="step-card fade-in tilt-card" style="transition-delay:0.1s">
+      <div class="card-shine"></div>
       <div class="step-num">STEP 02</div>
       <div class="step-icon">🤖</div>
       <div class="step-title">Stacy Answers</div>
       <p class="step-desc">Our AI agent Stacy picks up instantly, greets the caller naturally, and handles their query professionally.</p>
     </div>
-    <div class="step-card fade-in" style="transition-delay:0.2s">
+    <div class="step-card fade-in tilt-card" style="transition-delay:0.2s">
+      <div class="card-shine"></div>
       <div class="step-num">STEP 03</div>
       <div class="step-icon">📋</div>
       <div class="step-title">Lead Captured</div>
       <p class="step-desc">Stacy collects caller details, understands their needs, and logs everything so no opportunity is ever lost.</p>
     </div>
-    <div class="step-card fade-in" style="transition-delay:0.3s">
+    <div class="step-card fade-in tilt-card" style="transition-delay:0.3s">
+      <div class="card-shine"></div>
       <div class="step-num">STEP 04</div>
       <div class="step-icon">✅</div>
       <div class="step-title">You Close the Deal</div>
@@ -1656,32 +1823,38 @@ footer {
   <h2 class="section-title">Everything You Need</h2>
   <p class="section-sub">Navain AI agents are built for real businesses. Powerful, reliable, and always professional.</p>
   <div class="features-grid">
-    <div class="feature-card fade-in">
+    <div class="feature-card fade-in tilt-card">
+      <div class="card-shine"></div>
       <div class="feature-icon">🌙</div>
       <div class="feature-title">24/7 Availability</div>
       <p class="feature-desc">Your AI agent never sleeps, never takes breaks, and never misses a call — day or night, weekends or holidays.</p>
     </div>
-    <div class="feature-card fade-in" style="transition-delay:0.1s">
+    <div class="feature-card fade-in tilt-card" style="transition-delay:0.1s">
+      <div class="card-shine"></div>
       <div class="feature-icon">📅</div>
       <div class="feature-title">Booking Management</div>
       <p class="feature-desc">Stacy books appointments and manages your calendar in real time, sending confirmations automatically.</p>
     </div>
-    <div class="feature-card fade-in" style="transition-delay:0.2s">
+    <div class="feature-card fade-in tilt-card" style="transition-delay:0.2s">
+      <div class="card-shine"></div>
       <div class="feature-icon">🎯</div>
       <div class="feature-title">Lead Qualification</div>
       <p class="feature-desc">Every caller is qualified and categorized. You only spend time on the leads that matter most.</p>
     </div>
-    <div class="feature-card fade-in" style="transition-delay:0.3s">
+    <div class="feature-card fade-in tilt-card" style="transition-delay:0.3s">
+      <div class="card-shine"></div>
       <div class="feature-icon">⚡</div>
       <div class="feature-title">24-Hour Setup</div>
       <p class="feature-desc">From signup to live in under 24 hours. No hardware, no coding, no complex setup required.</p>
     </div>
-    <div class="feature-card fade-in" style="transition-delay:0.4s">
+    <div class="feature-card fade-in tilt-card" style="transition-delay:0.4s">
+      <div class="card-shine"></div>
       <div class="feature-icon">🏭</div>
       <div class="feature-title">Every Industry</div>
       <p class="feature-desc">Dental clinics, law firms, auto shops, real estate, plumbers, restaurants — we work across every sector.</p>
     </div>
-    <div class="feature-card fade-in" style="transition-delay:0.5s">
+    <div class="feature-card fade-in tilt-card" style="transition-delay:0.5s">
+      <div class="card-shine"></div>
       <div class="feature-icon">📊</div>
       <div class="feature-title">Call Analytics</div>
       <p class="feature-desc">Full call logs, summaries, and performance reports so you always know what's happening with your calls.</p>
@@ -2384,6 +2557,156 @@ window.addEventListener('scroll', () => {
 </script>
 
 </div><!-- /page-wrap -->
+
+<!-- ── 3D ENHANCEMENTS ── -->
+<script>
+(function() {
+  // ── Three.js hero background ──
+  var canvas = document.getElementById('hero-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var hero = canvas.parentElement;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+  camera.position.z = 80;
+
+  function resize() {
+    var w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particle nodes
+  var nodeCount = 120;
+  var nodeGeo = new THREE.BufferGeometry();
+  var positions = new Float32Array(nodeCount * 3);
+  var nodeData = [];
+  for (var i = 0; i < nodeCount; i++) {
+    var x = (Math.random() - 0.5) * 200;
+    var y = (Math.random() - 0.5) * 160;
+    var z = (Math.random() - 0.5) * 60;
+    positions[i * 3]     = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+    nodeData.push({ x: x, y: y, z: z, vx: (Math.random()-0.5)*0.04, vy: (Math.random()-0.5)*0.04, vz: (Math.random()-0.5)*0.02 });
+  }
+  nodeGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  var nodeMat = new THREE.PointsMaterial({ color: 0x00c8ff, size: 1.2, transparent: true, opacity: 0.7, sizeAttenuation: true });
+  var nodes = new THREE.Points(nodeGeo, nodeMat);
+  scene.add(nodes);
+
+  // Connection lines
+  var lineGeo = new THREE.BufferGeometry();
+  var maxLines = 300;
+  var linePositions = new Float32Array(maxLines * 6);
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+  var lineMat = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({ color: 0x00c8ff, transparent: true, opacity: 0.1 }));
+  scene.add(lineMat);
+
+  // Mouse parallax
+  var mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', function(e) {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  var clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+
+    // Move nodes
+    var pos = nodeGeo.attributes.position.array;
+    for (var i = 0; i < nodeCount; i++) {
+      nodeData[i].x += nodeData[i].vx;
+      nodeData[i].y += nodeData[i].vy;
+      nodeData[i].z += nodeData[i].vz;
+      if (Math.abs(nodeData[i].x) > 100) nodeData[i].vx *= -1;
+      if (Math.abs(nodeData[i].y) > 80)  nodeData[i].vy *= -1;
+      if (Math.abs(nodeData[i].z) > 30)  nodeData[i].vz *= -1;
+      pos[i * 3]     = nodeData[i].x;
+      pos[i * 3 + 1] = nodeData[i].y;
+      pos[i * 3 + 2] = nodeData[i].z;
+    }
+    nodeGeo.attributes.position.needsUpdate = true;
+
+    // Update connection lines
+    var lp = lineGeo.attributes.position.array;
+    var lineIdx = 0;
+    for (var a = 0; a < nodeCount && lineIdx < maxLines; a++) {
+      for (var b = a + 1; b < nodeCount && lineIdx < maxLines; b++) {
+        var dx = nodeData[a].x - nodeData[b].x;
+        var dy = nodeData[a].y - nodeData[b].y;
+        var dz = nodeData[a].z - nodeData[b].z;
+        var dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+        if (dist < 30) {
+          lp[lineIdx*6]   = nodeData[a].x; lp[lineIdx*6+1] = nodeData[a].y; lp[lineIdx*6+2] = nodeData[a].z;
+          lp[lineIdx*6+3] = nodeData[b].x; lp[lineIdx*6+4] = nodeData[b].y; lp[lineIdx*6+5] = nodeData[b].z;
+          lineIdx++;
+        }
+      }
+    }
+    lineGeo.setDrawRange(0, lineIdx * 2);
+    lineGeo.attributes.position.needsUpdate = true;
+
+    // Parallax camera
+    camera.position.x += (mouseX * 8 - camera.position.x) * 0.03;
+    camera.position.y += (-mouseY * 6 - camera.position.y) * 0.03;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // ── 3D Card Tilt on mouse ──
+  var tiltCards = document.querySelectorAll('.tilt-card');
+  tiltCards.forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / (rect.width / 2);
+      var dy = (e.clientY - cy) / (rect.height / 2);
+      var tiltX = dy * -8;
+      var tiltY = dx * 8;
+      card.style.transition = 'transform 0.05s ease, box-shadow 0.3s, border-color 0.3s';
+      card.style.transform = 'perspective(800px) rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) translateZ(8px)';
+
+      // Update shine position
+      var shine = card.querySelector('.card-shine');
+      if (shine) {
+        var px = ((e.clientX - rect.left) / rect.width) * 100;
+        var py = ((e.clientY - rect.top)  / rect.height) * 100;
+        shine.style.background = 'radial-gradient(circle at ' + px + '% ' + py + '%, rgba(0,200,255,0.12) 0%, transparent 60%)';
+        shine.style.opacity = '1';
+      }
+    });
+
+    card.addEventListener('mouseleave', function() {
+      card.style.transition = 'transform 0.5s ease, box-shadow 0.3s, border-color 0.3s';
+      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      var shine = card.querySelector('.card-shine');
+      if (shine) shine.style.opacity = '0';
+    });
+  });
+
+  // ── Mobile: disable tilt on touch devices ──
+  if ('ontouchstart' in window) {
+    tiltCards.forEach(function(card) {
+      card.style.transform = 'none';
+    });
+  }
+})();
+</script>
 
 <!-- ══════════════════════════════════════ -->
 <!-- NAVAIN AI CHATBOT -->
