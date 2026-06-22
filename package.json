@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "scripts": {
+    "build:three": "vite build",
+    "build:scrollfx": "vite build --config vite.config.scrollfx.js",
+    "build:all": "npm run build:three && npm run build:scrollfx",
+    "dev:three": "vite build --watch"
+  },
+  "dependencies": {
+    "three": "0.160.0",
+    "gsap": "3.12.5"
+  },
+  "devDependencies": {
+    "vite": "5.4.21"
+  }
+}
