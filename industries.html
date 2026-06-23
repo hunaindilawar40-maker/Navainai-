@@ -40,6 +40,7 @@
     font-family: 'Inter', sans-serif;
     overflow-x:hidden;
   }
+  html{overflow-x:hidden;}
   .glass-surface{
     backdrop-filter:blur(10px) saturate(150%);
     -webkit-backdrop-filter:blur(10px) saturate(150%);
@@ -429,8 +430,9 @@
   .site-footer{background:var(--navy-deep); border-top:1px solid rgba(245,240,230,0.08); padding:36px 0; color:rgba(245,240,230,0.5); font-size:13px;}
   .site-footer .wrap{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;}
   .footer-brand{font-family:'Fraunces',serif; font-weight:600; color:var(--cream); font-size:15px;}
-  .footer-links{display:flex; gap:24px; list-style:none;}
+  .footer-links{display:flex; gap:16px; list-style:none; flex-wrap:wrap;}
   .footer-links a:hover{color:var(--brass-bright);}
+  @media(max-width:760px){.site-footer .wrap{flex-direction:column;align-items:center;text-align:center;gap:20px;}.footer-links{justify-content:center;gap:10px 16px;font-size:12px;}}
 
   /* ---------- CHATBOT (Navain AI Assistant — Stacy) ---------- */
   #navain-chat-bubble{position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483647!important;display:block!important;}
@@ -477,8 +479,8 @@
   .scroll-trace{
     position:fixed; top:0; right:18px; width:46px; height:100vh; z-index:35; pointer-events:none;
   }
-  @media (max-width:760px){ .scroll-trace{ right:6px; width:30px; } }
-  #traceSvg{width:100%; height:100%; overflow:visible; display:block;}
+  @media (max-width:760px){ .scroll-trace{ display:none; } }
+  #traceSvg{width:100%; height:100%; overflow:hidden; display:block;}
   #traceBase{fill:none; stroke:rgba(245,240,230,0.14); stroke-width:1.4; stroke-linecap:round;}
   #traceProgress{fill:none; stroke:var(--brass-bright); stroke-width:1.8; stroke-linecap:round; filter:drop-shadow(0 0 4px rgba(224,166,84,0.6));}
   .trace-node{
