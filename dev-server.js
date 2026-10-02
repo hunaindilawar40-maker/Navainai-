@@ -18,6 +18,10 @@ const HOST = process.env.HOST || '0.0.0.0';
 const PORT = Number(process.env.PORT || 3000);
 
 // ---------------------------------------------------------------- env loading
+// Names we took from a .env file, so editing them in the file still wins over
+// the copy already in process.env (real shell variables are never overwritten).
+const fromFile = new Set();
+
 function loadEnvFile(file) {
   try {
     const raw = fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -31,15 +35,23 @@ function loadEnvFile(file) {
       ) {
         value = value.slice(1, -1);
       }
-      if (!(match[1] in process.env)) process.env[match[1]] = value;
+      if (!(match[1] in process.env) || fromFile.has(match[1])) {
+        process.env[match[1]] = value;
+        fromFile.add(match[1]);
+      }
     }
-    console.log(`[env] loaded ${file}`);
+    return true;
   } catch {
-    /* file is optional */
+    return false; // file is optional
   }
 }
-loadEnvFile('.env.local');
-loadEnvFile('.env');
+
+/** Re-read the env files so a key added in the editor applies on the next refresh. */
+function refreshEnv(verbose) {
+  const loaded = [loadEnvFile('.env.local'), loadEnvFile('.env')].filter(Boolean);
+  if (loaded.length && verbose) console.log('[env] loaded .env.local / .env');
+}
+refreshEnv(true);
 
 // ------------------------------------------------------------------- helpers
 const MIME = {
@@ -110,6 +122,9 @@ async function handleApi(req, res, urlPath) {
   }
 
   req.body = await readBody(req);
+
+  // Pick up keys added to .env.local since the server started.
+  refreshEnv(false);
 
   // Cache-bust so edits to api/*.js apply on refresh without restarting.
   const module = await import(`${pathToFileURL(file).href}?t=${Date.now()}`);
