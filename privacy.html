@@ -678,15 +678,19 @@
 </div>
 
 <script>
-// Auto-load API key from Vercel environment (same as original site)
+// Ask the server which features are configured.
+// No API keys are sent to the browser any more — see api/config.js.
 (function(){
   fetch('/api/config')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(d.key){ window.NAVAIN_KEY = d.key; }
-      if(d.elevenKey){ window.ELEVEN_KEY = d.elevenKey; }
+      window.NAVAIN_CHAT_READY = !!(d && d.chat);
+      window.NAVAIN_TTS_READY = !!(d && d.tts);
     })
-    .catch(function(){});
+    .catch(function(){
+      window.NAVAIN_CHAT_READY = false;
+      window.NAVAIN_TTS_READY = false;
+    });
 })();
 </script>
 
@@ -751,39 +755,24 @@
     chatHistory.push({ role: 'user', content: userMessage });
     if(window.__NAVAIN_STATS__) window.__NAVAIN_STATS__.chatMessages++;
     showTyping();
-    if(!window.NAVAIN_KEY){
-      await new Promise(function(resolve){
-        var tries = 0;
-        var interval = setInterval(function(){
-          tries++;
-          if(window.NAVAIN_KEY || tries > 15){ clearInterval(interval); resolve(); }
-        }, 200);
-      });
-    }
-    var apiKey = window.NAVAIN_KEY || '';
-    if(!apiKey){
-      removeTyping();
-      addMsg("The AI assistant needs an API key to work. Please contact us directly at revenuepartners.co@gmail.com or call +1 (209) 960-3164!", 'bot');
-      return;
-    }
+    // Calls our own server-side proxy — the Groq key never reaches the browser.
     try {
-      var response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      var response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + apiKey
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
+          system: SYSTEM_PROMPT,
           max_tokens: 1000,
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            ...chatHistory
-          ]
+          messages: chatHistory
         })
       });
-      var data = await response.json();
-      var reply = data.choices && data.choices[0] ? data.choices[0].message.content : "I'm having a quick moment — please try again!";
+      var data = await response.json().catch(function(){ return {}; });
+      if(!response.ok || data.error){
+        removeTyping();
+        addMsg(data.error || "Sorry, I'm having a quick connection issue. Please email us at revenuepartners.co@gmail.com or call +1 (209) 960-3164!", 'bot');
+        return;
+      }
+      var reply = data.text || (data.choices && data.choices[0] ? data.choices[0].message.content : "I'm having a quick moment — please try again!");
       chatHistory.push({ role: 'assistant', content: reply });
       removeTyping();
       addMsg(reply, 'bot');

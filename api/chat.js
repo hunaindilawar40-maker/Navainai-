@@ -1,74 +1,95 @@
-module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+import { cors, readJson, rateLimit } from '../lib/api-utils.js';
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
+/**
+ * Server-side proxy for the "Stacy" chat widget.
+ *
+ * The browser posts here, this function talks to Groq with the secret key.
+ * The key is never sent to the client.
+ */
+
+// GROQ_API_URL exists so the endpoint can be pointed at a mock during testing.
+const GROQ_URL = process.env.GROQ_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const MAX_HISTORY = 20; // keep the last N turns so requests stay small
+const MAX_MESSAGE_CHARS = 4000;
+
+export default async function handler(req, res) {
+  cors(res);
+
+  if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
-  const GROQ_API_KEY = process.env.GROQ_API_KEY;
-  if (!GROQ_API_KEY) return res.status(500).json({ error: 'GROQ_API_KEY not set' });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    // A plain, non-technical message — this is what visitors would see.
+    return res.status(503).json({
+      error:
+        'The AI assistant is offline right now. Please email revenuepartners.co@gmail.com or call +1 (209) 960-3164.',
+    });
+  }
+
+  if (!rateLimit(req, res, { limit: 20, windowMs: 5 * 60 * 1000 })) return;
 
   try {
-    // Robustly parse the request body
-    let body;
-    try {
-      const chunks = [];
-      for await (const chunk of req) chunks.push(chunk);
-      const raw = Buffer.concat(chunks).toString();
-      body = JSON.parse(raw);
-    } catch (e) {
-      body = req.body || {};
-    }
+    const body = await readJson(req);
 
-    // Build messages array in Groq/OpenAI format
     const messages = [];
     if (body.system) {
-      messages.push({ role: 'system', content: body.system });
-    }
-    if (Array.isArray(body.messages)) {
-      body.messages.forEach(function(m) {
-        if (m.role && m.content) {
-          messages.push({ role: m.role, content: m.content });
-        }
-      });
+      messages.push({ role: 'system', content: String(body.system).slice(0, 8000) });
     }
 
-    // Fallback so we never send an empty messages array
-    if (messages.length === 0) {
+    if (Array.isArray(body.messages)) {
+      const turns = body.messages
+        .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && m.content)
+        .slice(-MAX_HISTORY)
+        .map((m) => ({
+          role: m.role,
+          content: String(m.content).slice(0, MAX_MESSAGE_CHARS),
+        }));
+      messages.push(...turns);
+    }
+
+    if (!messages.some((m) => m.role !== 'system')) {
       messages.push({ role: 'user', content: 'Hello' });
     }
 
-    const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const maxTokens = Number.isFinite(Number(body.max_tokens))
+      ? Math.min(Math.max(Number(body.max_tokens), 64), 2000)
+      : 1000;
+
+    const groqResponse = await fetch(GROQ_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + GROQ_API_KEY
+        Authorization: 'Bearer ' + apiKey,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        max_tokens: 500,
-        messages: messages
-      })
+        model: MODEL,
+        max_tokens: maxTokens,
+        temperature: 0.6,
+        messages,
+      }),
     });
 
-    const data = await groqResponse.json();
+    const data = await groqResponse.json().catch(() => ({}));
 
-    // Surface Groq errors clearly
-    if (data.error) {
-      return res.status(500).json({ error: data.error.message });
+    if (!groqResponse.ok || data.error) {
+      const detail = data?.error?.message || `Groq request failed (${groqResponse.status})`;
+      console.error('[api/chat] Groq error:', detail);
+      return res.status(502).json({ error: 'The AI assistant had a connection issue. Please try again.' });
     }
 
-    const text = (data.choices && data.choices[0] && data.choices[0].message)
-      ? data.choices[0].message.content
-      : 'Sorry, I could not respond right now. Please try again!';
+    const text =
+      data?.choices?.[0]?.message?.content ||
+      "I'm having a quick moment — please try again!";
 
-    // Return in Anthropic-style so the HTML JS works without changes
+    // Anthropic-style envelope so the markup on the pages can stay simple.
     return res.status(200).json({
-      content: [{ type: 'text', text: text }]
+      text,
+      content: [{ type: 'text', text }],
     });
-
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error('[api/chat] unexpected error:', err);
+    return res.status(500).json({ error: 'Unexpected server error. Please try again.' });
   }
-};
+}
