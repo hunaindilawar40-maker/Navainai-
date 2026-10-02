@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# secrets — never commit real keys
+.env
+.env.local
+.env.*.local
+
+# build output
+dist/
+dist-scrollfx/
+
+# vite / node caches
+.vite/
+*.log
+npm-debug.log*
+
+# editor + OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

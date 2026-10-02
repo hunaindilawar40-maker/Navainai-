@@ -1,14 +1,23 @@
 {
+  "name": "navain-ai-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Navain AI marketing site — static HTML pages plus serverless API routes for the chat assistant.",
   "type": "module",
   "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
     "build:three": "vite build",
     "build:scrollfx": "vite build --config vite.config.scrollfx.js",
     "build:all": "npm run build:three && npm run build:scrollfx",
     "dev:three": "vite build --watch"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "three": "0.160.0",
-    "gsap": "3.12.5"
+    "gsap": "3.12.5",
+    "three": "0.160.0"
   },
   "devDependencies": {
     "vite": "5.4.21"

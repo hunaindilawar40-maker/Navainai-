@@ -21,9 +21,20 @@ This project uses a small Node.js build step for two things: the 3D crystal in t
 ```
 npm install
 # edit src/three-hero.js or src/scroll-fx.js
-npm run build:all      # rebuilds both bundles
+npm run build:all      # rebuilds both bundles into dist/ and dist-scrollfx/
+```
+Then copy the result over the committed bundle:
+```
+cp dist/three-hero.bundle.js   assets/three-hero.bundle.js
+cp dist-scrollfx/scroll-fx.bundle.js assets/scroll-fx.bundle.js
 ```
 Commit the updated files in `assets/` along with your source changes.
+
+## Local preview
+```
+npm run dev            # serves the pages + runs /api locally at http://localhost:3000
+```
+The chat widget needs `GROQ_API_KEY` in `.env.local` — see `README.md` and `.env.example`.
 
 ## Notes
 - The 3D crystal is hidden on small phones (`max-width: 640px`) for performance.
