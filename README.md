@@ -3,7 +3,7 @@
 The Navain AI marketing site: ten static HTML pages, two pre-built animation bundles, and a
 serverless API layer for the AI chat assistant.
 
-Live site: https://navainai.vercel.app
+Live site: https://navainai.com
 
 ## Quick start
 
